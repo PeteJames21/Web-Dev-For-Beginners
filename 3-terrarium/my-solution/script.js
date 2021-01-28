@@ -1,3 +1,5 @@
+// Allow plants to be repositioned using mouse and touch events.
+
 dragElement(document.getElementById('plant1'));
 dragElement(document.getElementById('plant2'));
 dragElement(document.getElementById('plant3'));
@@ -28,23 +30,33 @@ function dragElement(terrariumElement) {
     function pointerDrag(e) {
         e.preventDefault();
         console.log(e);
+        // Get initial cursor position.
         pos3 = e.clientX;
         pos4 = e.clientY;
+        // Start the drag when the pointer moves.
         document.onpointermove = elementDrag;
+        // Stop the drag when mouse button is released.
         document.onpointerup = stopElementDrag;
     }
 
     function elementDrag(e) {
+        // Calculate the new cursor position.
+		// pos1 = where the Xmouse WAS - where it IS
         pos1 = pos3 - e.clientX;
+        // pos2 = where the Ymouse WAS - where it IS
         pos2 = pos4 - e.clientY;
+        // Reset pos3 and pos4 to current Xmouse and Ymouse
+        // locations respectively. 
         pos3 = e.clientX;
         pos4 = e.clientY;
         console.log(pos1, pos2, pos3, pos4);
+        // Set new position of element.
         terrariumElement.style.top = terrariumElement.offsetTop - pos2 + 'px';
         terrariumElement.style.left = terrariumElement.offsetLeft - pos1 + 'px';
     }
 
     function stopElementDrag() {
+        // Stop calculating when mouse button is released.
         document.onpointerup = null;
         document.onpointermove = null;
     }
