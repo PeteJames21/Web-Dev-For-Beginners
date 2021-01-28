@@ -18,8 +18,12 @@ function dragElement(terrariumElement) {
 	let pos1 = 0,
 		pos2 = 0,
 		pos3 = 0,
-		pos4 = 0;
+        pos4 = 0;
+        initialTopPos = terrariumElement.style.top;
+        initialLeftPos = terrariumElement.style.left;
+
     terrariumElement.onpointerdown = pointerDrag;
+    terrariumElement.ondblclick = resetPosition;
     
     function pointerDrag(e) {
         e.preventDefault();
@@ -44,4 +48,11 @@ function dragElement(terrariumElement) {
         document.onpointerup = null;
         document.onpointermove = null;
     }
-}
+    
+    function resetPosition(e){
+        // Move plant back to initial position.
+        terrariumElement.style.top = initialTopPos
+        terrariumElement.style.left = initialLeftPos
+    }
+
+    }
