@@ -1,3 +1,8 @@
+// TODO:
+// -> store high score as secs/word instead of raw time.
+
+
+
 // all of our quotes
 const quotes = [
     'When you have eliminated the impossible, whatever remains, however improbable, must be the truth.',
@@ -17,6 +22,9 @@ let startTime = Date.now();
 const quoteElement = document.getElementById('quote');
 const messageElement = document.getElementById('message');
 const typedValueElement = document.getElementById('typed-value');
+const localStorage = window.localStorage;
+// Highest score on record.
+let highestScore = localStorage.getItem('highestScore');
 
 document.getElementById('start').addEventListener('click', () => {
     // get a quote
@@ -43,6 +51,9 @@ document.getElementById('start').addEventListener('click', () => {
     // set focus
     typedValueElement.focus();
     // set the event handler
+
+    // Enable the textbox
+    typedValueElement.disabled = false;
   
     // Start the timer
     startTime = new Date().getTime();
@@ -55,11 +66,25 @@ document.getElementById('start').addEventListener('click', () => {
     const typedValue = typedValueElement.value;
   
     if (typedValue === currentWord && wordIndex === words.length - 1) {
-      // end of sentence
+      // End of sentence
       // Display success
-      const elapsedTime = new Date().getTime() - startTime;
-      const message = `CONGRATULATIONS! You finished in ${elapsedTime / 1000} seconds.`;
+      let elapsedTime = new Date().getTime() - startTime;
+      elapsedTime = elapsedTime / 1000
+      const message = `CONGRATULATIONS! You finished in ${elapsedTime} seconds.`;
       messageElement.innerText = message;
+      // Disable the textbox and the event listener on it.
+      typedValueElement.disabled = true;
+      typedValueElement.oninput = null;
+      // Clear the textbox.
+      typedValueElement.value = '';
+      // Display dialog box with success message.
+      alert(`CONGRATULATIONS! You finished in ${elapsedTime} seconds`);
+
+      // Update high scores.
+      if (elapsedTime < highestScore){
+        localStorage.setItem('highestScore', elapsedTime);
+      }
+
     } else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) {
       // end of word
       // clear the typedValueElement for the new word
